@@ -5,14 +5,8 @@
 //          onto a cube model.
 // Author:  John Gauch
 // Date:    April 2011
+// Notes: Thanks programming dad!
 //---------------------------------------
-//#include <math.h>
-//#include <stdio.h>
-//#include <stdlib.h>
-//#ifdef MAC
-//#include <GLUT/glut.h>
-//#else
-//#include <GL/glut.h>
 
 #ifdef __linux__
 #include <GL/glut.h>
@@ -21,6 +15,13 @@
 #endif
 
 #include "libim/im_color.h"
+#include <fstream>
+#include <string>
+#include <vector>
+#include <sstream>
+#include <iostream>
+
+using namespace std;
 
 // Global variables
 #define ROTATE 1
@@ -32,6 +33,12 @@ int xpos = 0;
 int ypos = 0;
 int zpos = 0;
 int mode = ROTATE;
+
+int rows = 0;
+int cols = 0;
+int startRow = 0;
+int startCol = 0;
+vector<vector<char>> maze;
 
 //---------------------------------------
 // Initialize texture image
@@ -272,6 +279,54 @@ void mouse(int button, int state, int x, int y)
     }
 }
 
+
+void ReadInMuhTextMAN(){
+    
+    string line, token;
+    ifstream file("textYo.txt");
+    
+    int i=0;
+    vector<int> vec;
+    
+    // read in first two rows
+    while(i < 2)
+    {
+        getline(file, line);
+        stringstream s(line);
+        
+        while (s >> token)
+        {
+            vec.push_back(stoi(token));
+        }
+        i++;
+    }
+    
+    rows = vec[0];
+    cols = vec[1];
+    startCol = vec[2];
+    startRow = vec[3];
+
+    // read in maze
+    for (int i = 0; i < rows; i++) {
+        getline(file, line);
+        vector<char> row;
+        for (int j = 0; j <  cols; j++) {
+            row.push_back(line[j]);
+        }
+        maze.push_back(row);
+    }
+    
+    
+    
+    
+    
+    
+}
+
+    
+    
+
+
 //---------------------------------------
 // Main program
 //---------------------------------------
@@ -287,6 +342,8 @@ int main(int argc, char *argv[])
     glutKeyboardFunc(keyboard);
     glutMouseFunc(mouse);
     init();
+    ReadInMuhTextMAN();
+
     printf("Keyboard commands:\n");
     printf("   't' or 'T' - go to translate mode\n");
     printf("   'r' or 'R' - go to rotate mode\n");
