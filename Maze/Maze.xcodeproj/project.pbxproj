@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		B105C1462260F3C50058FD68 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B105C1452260F3C50058FD68 /* main.cpp */; };
+		B105C14E2260F5FC0058FD68 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B105C14D2260F5FC0058FD68 /* GLUT.framework */; };
+		B105C1542260F61E0058FD68 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B105C1532260F61E0058FD68 /* libjpeg.a */; };
+		B105C1552260F6250058FD68 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B105C14F2260F6030058FD68 /* OpenGL.framework */; };
+		B105C1572260F6430058FD68 /* libim.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B105C1562260F6430058FD68 /* libim.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +29,10 @@
 /* Begin PBXFileReference section */
 		B105C1422260F3C50058FD68 /* Maze */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Maze; sourceTree = BUILT_PRODUCTS_DIR; };
 		B105C1452260F3C50058FD68 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		B105C14D2260F5FC0058FD68 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
+		B105C14F2260F6030058FD68 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		B105C1532260F61E0058FD68 /* libjpeg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjpeg.a; path = Maze/jpeg/libjpeg.a; sourceTree = "<group>"; };
+		B105C1562260F6430058FD68 /* libim.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libim.a; path = Maze/libim/libim.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +40,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B105C1552260F6250058FD68 /* OpenGL.framework in Frameworks */,
+				B105C14E2260F5FC0058FD68 /* GLUT.framework in Frameworks */,
+				B105C1542260F61E0058FD68 /* libjpeg.a in Frameworks */,
+				B105C1572260F6430058FD68 /* libim.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -43,6 +55,7 @@
 			children = (
 				B105C1442260F3C50058FD68 /* Maze */,
 				B105C1432260F3C50058FD68 /* Products */,
+				B105C14C2260F5FC0058FD68 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -60,6 +73,17 @@
 				B105C1452260F3C50058FD68 /* main.cpp */,
 			);
 			path = Maze;
+			sourceTree = "<group>";
+		};
+		B105C14C2260F5FC0058FD68 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B105C1562260F6430058FD68 /* libim.a */,
+				B105C1532260F61E0058FD68 /* libjpeg.a */,
+				B105C14F2260F6030058FD68 /* OpenGL.framework */,
+				B105C14D2260F5FC0058FD68 /* GLUT.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -240,6 +264,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Maze/jpeg",
+					"$(PROJECT_DIR)/Maze/libim",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -248,6 +278,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Maze/jpeg",
+					"$(PROJECT_DIR)/Maze/libim",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
