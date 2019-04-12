@@ -163,7 +163,7 @@ void init()
     glOrtho(-2.0, 2.0, -2.0, 2.0, -2.0, 2.0);
     glEnable(GL_DEPTH_TEST);
     
-    // Init texture
+    // Init brick texture
     int xdim, ydim;
     unsigned char *texture;
     init_texture((char *)"textures/brick0.jpg", texture, xdim, ydim);
@@ -189,8 +189,31 @@ void display()
     glRotatef(yangle, 0.0, 1.0, 0.0);
     glRotatef(zangle, 0.0, 0.0, 1.0);
     
-    // Draw objects
-    block(-1, -1, -1, 1, 1, 1);
+    float yposition = -.25;
+    float zposition = -.25;
+    float size = .1;
+    // loop to draw blocks
+    for (int i = 0; i < rows; i++) {
+        
+        float xposition = .25;
+        for (int j = 0; j < cols; j++) {
+            
+            if(maze[i][j] == 'b')
+            {
+                block(xposition, yposition, zposition, xposition+size, yposition+size, zposition+size);
+                xposition +=size;
+            }
+            else if(maze[i][j] == 'r')
+            {
+                
+            }
+            else{
+                xposition+=size;
+            }
+        }
+        yposition+=size;
+    }
+    
     glFlush();
 }
 
@@ -315,18 +338,7 @@ void ReadInMuhTextMAN(){
         }
         maze.push_back(row);
     }
-    
-    
-    
-    
-    
-    
 }
-
-    
-    
-
-
 //---------------------------------------
 // Main program
 //---------------------------------------
@@ -334,8 +346,8 @@ int main(int argc, char *argv[])
 {
     // Create OpenGL window
     glutInit(&argc, argv);
-    glutInitWindowSize(500, 500);
-    glutInitWindowPosition(250, 250);
+    glutInitWindowSize(700, 700);
+    glutInitWindowPosition(200, 200);
     glutInitDisplayMode(GLUT_RGB | GLUT_SINGLE | GLUT_DEPTH);
     glutCreateWindow("Texture");
     glutDisplayFunc(display);
@@ -343,6 +355,7 @@ int main(int argc, char *argv[])
     glutMouseFunc(mouse);
     init();
     ReadInMuhTextMAN();
+    
 
     printf("Keyboard commands:\n");
     printf("   't' or 'T' - go to translate mode\n");
