@@ -40,10 +40,24 @@ int startRow = 0;
 int startCol = 0;
 vector<vector<char>> maze;
 
+unsigned char *brick;
+int xdim, ydim;
+
+unsigned char *grass;
+int grassXDim, grassYDim;
+
+unsigned char *rock;
+int rockXDim, rockYDim;
+
+unsigned char *wood;
+int woodXDim, woodYDim;
+
+// init texture with the char array and texture
 //---------------------------------------
 // Initialize texture image
 //---------------------------------------
-void init_texture(char *name, unsigned char *&texture, int &xdim, int &ydim)
+// (char *)"textures/brick0.jpg", texture, xdim, ydim
+void init_texture(char *name, unsigned char *&texture, int &xdim, int &ydim) //
 {
     // Read jpg image
     im_color image;
@@ -164,11 +178,15 @@ void init()
     glEnable(GL_DEPTH_TEST);
     
     // Init brick texture
-    int xdim, ydim;
-    unsigned char *texture;
-    init_texture((char *)"textures/brick0.jpg", texture, xdim, ydim);
+    init_texture((char *)"textures/brick0.jpg", brick, xdim, ydim);
+    init_texture((char *)"textures/grass1.jpg", grass, grassXDim, grassYDim);
+    init_texture((char *)"textures/rock1.jpg", rock, rockXDim, rockYDim);
+//    init_texture((char *)"textures/grass1.jpg", grass, grassXDim, grassYDim); finish wood
+
+    
     glEnable(GL_TEXTURE_2D);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, xdim, ydim, 0, GL_RGB, GL_UNSIGNED_BYTE, texture);
+//    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, xdim, ydim, 0, GL_RGB, GL_UNSIGNED_BYTE, brick);
+//    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, grassXDim, grassYDim, 0, GL_RGB, GL_UNSIGNED_BYTE, grass);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -189,25 +207,42 @@ void display()
     glRotatef(yangle, 0.0, 1.0, 0.0);
     glRotatef(zangle, 0.0, 0.0, 1.0);
     
-    float yposition = -.25;
-    float zposition = -.25;
+    float yposition = -1;
+    float zposition = 0;
     float size = .1;
     // loop to draw blocks
     for (int i = 0; i < rows; i++) {
         
-        float xposition = .25;
+        float xposition = -.5;
         for (int j = 0; j < cols; j++) {
             
             if(maze[i][j] == 'b')
             {
+                glEnable(GL_TEXTURE_2D);
+                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, xdim, ydim, 0, GL_RGB, GL_UNSIGNED_BYTE, brick);
+                //    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, grassXDim, grassYDim, 0, GL_RGB, GL_UNSIGNED_BYTE, grass);
+                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+                // before you call block you initialize the new texture
                 block(xposition, yposition, zposition, xposition+size, yposition+size, zposition+size);
                 xposition +=size;
             }
-            else if(maze[i][j] == 'r')
-            {
-                
-            }
+//            else if(maze[i][j] == 'r')
+//            {
+//
+//            }
             else{
+                glEnable(GL_TEXTURE_2D);
+                //    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, xdim, ydim, 0, GL_RGB, GL_UNSIGNED_BYTE, brick);
+                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, grassXDim, grassYDim, 0, GL_RGB, GL_UNSIGNED_BYTE, grass);
+                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+                block(xposition, yposition, zposition-size, xposition+size, yposition+size, zposition);
+
                 xposition+=size;
             }
         }
@@ -357,16 +392,16 @@ int main(int argc, char *argv[])
     ReadInMuhTextMAN();
     
 
-    printf("Keyboard commands:\n");
-    printf("   't' or 'T' - go to translate mode\n");
-    printf("   'r' or 'R' - go to rotate mode\n");
-    printf("   'x' - rotate or translate on x-axis -5\n");
-    printf("   'X' - rotate or translate on x-axis +5\n");
-    printf("   'y' - rotate or translate on y-axis -5\n");
-    printf("   'Y' - rotate or translate on y-axis +5\n");
-    printf("Mouse operations:\n");
-    printf("   'mouse down' - start selecting rotation direction\n");
-    printf("   'mouse up' - finish selecting rotation direction\n");
+//    printf("Keyboard commands:\n");
+//    printf("   't' or 'T' - go to translate mode\n");
+//    printf("   'r' or 'R' - go to rotate mode\n");
+//    printf("   'x' - rotate or translate on x-axis -5\n");
+//    printf("   'X' - rotate or translate on x-axis +5\n");
+//    printf("   'y' - rotate or translate on y-axis -5\n");
+//    printf("   'Y' - rotate or translate on y-axis +5\n");
+//    printf("Mouse operations:\n");
+//    printf("   'mouse down' - start selecting rotation direction\n");
+//    printf("   'mouse up' - finish selecting rotation direction\n");
     glutMainLoop();
     return 0;
 }
