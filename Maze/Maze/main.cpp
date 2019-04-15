@@ -58,6 +58,13 @@ int lavaXDim, lavaYDim;
 float playerX;
 float playerY;
 
+float size = .15;
+
+int Xoffset = 0;
+int Yoffset = 0;
+
+
+
 
 // init texture with the char array and texture
 //---------------------------------------
@@ -283,6 +290,10 @@ void init()
     init_texture((char *)"textures/rock1.jpg", rock, rockXDim, rockYDim);
     init_texture((char *)"textures/wood.jpg", wood, woodXDim, woodYDim);
     init_texture((char *)"textures/lava2.jpg", lava, lavaXDim, lavaYDim);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 }
 
 //---------------------------------------
@@ -301,7 +312,6 @@ void display()
     
     float yposition = -1.4;
     float zposition = 0;
-    float size = .15;
     // loop to draw blocks
 
     for (int i = 0; i < rows; i++) {
@@ -309,21 +319,12 @@ void display()
         float xposition = -1.4;
         for (int j = 0; j < cols; j++) {
             
-            // draw the player
-//            if(maze[i][j] == 'p')
-//            {
-//
-//            }
             if(maze[i][j] == 'b')
             {
 
                 glEnable(GL_TEXTURE_2D);
-
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, xdim, ydim, 0, GL_RGB, GL_UNSIGNED_BYTE, brick);
-                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
                 // before you call block you initialize the new texture
                 block(xposition, yposition, zposition, xposition+size, yposition+size, zposition+size);
                 
@@ -333,10 +334,6 @@ void display()
             {
                 glEnable(GL_TEXTURE_2D);
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, rockXDim, rockYDim, 0, GL_RGB, GL_UNSIGNED_BYTE, rock);
-                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
                 block(xposition, yposition, zposition, xposition+size, yposition+size, zposition+size);
 
                 xposition+=size;
@@ -345,10 +342,6 @@ void display()
             {
                 glEnable(GL_TEXTURE_2D);
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, woodXDim, woodYDim, 0, GL_RGB, GL_UNSIGNED_BYTE, wood);
-                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
                 block(xposition, yposition, zposition, xposition+size, yposition+size, zposition+size);
                 
                 xposition+=size;
@@ -357,27 +350,19 @@ void display()
             {
                 glEnable(GL_TEXTURE_2D);
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, lavaXDim, lavaYDim, 0, GL_RGB, GL_UNSIGNED_BYTE, lava);
-                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
                 block(xposition, yposition, zposition, xposition+size, yposition+size, zposition+size);
-                
+
                 xposition+=size;
+                
             }
             else{
                 glEnable(GL_TEXTURE_2D);
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, grassXDim, grassYDim, 0, GL_RGB, GL_UNSIGNED_BYTE, grass);
-                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
                 block(xposition, yposition, zposition, xposition+size, yposition+size, zposition);
 
                 xposition+=size;
             }
-//            glDisable(GL_TEXTURE_2D);
-//            draw_cube(1, 1, 1, 1);
+
 
         }
         yposition+=size;
@@ -401,6 +386,45 @@ void keyboard(unsigned char key, int x, int y)
     {
         printf("Type x y z to decrease or X Y Z to increase TRANSLATION distance.\n");
         mode = TRANSLATE;
+    }
+    
+
+    if(key == 'w')
+    {
+      if(maze[startCol+1][startRow] == ' ')
+      {
+          maze[startCol][startRow] = ' ';
+          startCol++;
+          maze[startCol][startRow] = 'p';
+      }
+    }
+    if(key == 'a')
+    {
+        if(maze[startCol][startRow-1] == ' ')
+        {
+            maze[startCol][startRow] = ' ';
+            startRow--;
+            maze[startCol][startRow] = 'p';
+        }
+    }
+    if(key == 's')
+    {
+        if(maze[startCol-1][startRow] == ' ')
+        {
+            maze[startCol][startRow] = ' ';
+            startCol--;
+            maze[startCol][startRow] = 'p';
+        }    }
+    if(key == 'd')
+    {
+        {
+            if(maze[startCol][startRow+1] == ' ')
+            {
+                maze[startCol][startRow] = ' ';
+                startRow++;
+                maze[startCol][startRow] = 'p';
+            }
+        }
     }
     
     // Handle ROTATE
@@ -440,38 +464,6 @@ void keyboard(unsigned char key, int x, int y)
     }
 }
 
-//---------------------------------------
-// Mouse callback for OpenGL
-//---------------------------------------
-void mouse(int button, int state, int x, int y)
-{
-    // Handle mouse down
-    static int xdown, ydown;
-    if (state == GLUT_DOWN)
-    {
-        xdown = x;
-        ydown = y;
-    }
-    
-    // Handle ROTATE
-    if ((mode == ROTATE) && (state == GLUT_UP))
-    {
-        xangle += (y - ydown);
-        yangle -= (x - xdown);
-        zangle = 0;
-        glutPostRedisplay();
-    }
-    
-    // Handle TRANSLATE
-    if ((mode == TRANSLATE) && (state == GLUT_UP))
-    {
-        xpos += (x - xdown);
-        ypos -= (y - ydown);
-        glutPostRedisplay();
-    }
-}
-
-
 void ReadInMuhTextMAN(){
     
     string line, token;
@@ -497,8 +489,6 @@ void ReadInMuhTextMAN(){
     cols = vec[1];
     startCol = vec[2];
     startRow = vec[3];
-    playerX = vec[2];
-    playerY = vec[3];
 
     // read in maze
     for (int i = 0; i < rows; i++) {
@@ -524,21 +514,18 @@ int main(int argc, char *argv[])
     glutCreateWindow("Texture");
     glutDisplayFunc(display);
     glutKeyboardFunc(keyboard);
-    glutMouseFunc(mouse);
     init();
     ReadInMuhTextMAN();
-    
 
-//    printf("Keyboard commands:\n");
-//    printf("   't' or 'T' - go to translate mode\n");
-//    printf("   'r' or 'R' - go to rotate mode\n");
-//    printf("   'x' - rotate or translate on x-axis -5\n");
-//    printf("   'X' - rotate or translate on x-axis +5\n");
-//    printf("   'y' - rotate or translate on y-axis -5\n");
-//    printf("   'Y' - rotate or translate on y-axis +5\n");
-//    printf("Mouse operations:\n");
-//    printf("   'mouse down' - start selecting rotation direction\n");
-//    printf("   'mouse up' - finish selecting rotation direction\n");
+    printf("Keyboard commands:\n");
+    printf("   't' or 'T' - go to translate mode\n");
+    printf("   'r' or 'R' - go to rotate mode\n");
+    printf("   'x' - rotate or translate on x-axis -5\n");
+    printf("   'X' - rotate or translate on x-axis +5\n");
+    printf("   'y' - rotate or translate on y-axis -5\n");
+    printf("   'Y' - rotate or translate on y-axis +5\n");
+    printf("Use WASD to control player\n");
+
     glutMainLoop();
     return 0;
 }
