@@ -52,6 +52,13 @@ int rockXDim, rockYDim;
 unsigned char *wood;
 int woodXDim, woodYDim;
 
+unsigned char *lava;
+int lavaXDim, lavaYDim;
+
+float playerX;
+float playerY;
+
+
 // init texture with the char array and texture
 //---------------------------------------
 // Initialize texture image
@@ -80,6 +87,99 @@ void init_texture(char *name, unsigned char *&texture, int &xdim, int &ydim) //
         }
 }
 
+void rectangle(float red, float green, float blue,
+               float x1, float y1, float x2, float y2)
+{
+    // Draw rectangle
+    glColor3f(red, green, blue);
+    glBegin(GL_POLYGON);
+    glVertex2f(x1, y1);
+    glVertex2f(x2, y1);
+    glVertex2f(x2, y2);
+    glVertex2f(x1, y2);
+    glEnd();
+}
+
+//---------------------------------------
+// Draw 3D cube
+//---------------------------------------
+void draw_cube(float midx, float midy, float midz, float size)
+{
+    // Define 8 vertices
+    float ax = midx - size / 2;
+    float ay = midy - size / 2;
+    float az = midz + size / 2;
+    float bx = midx + size / 2;
+    float by = midy - size / 2;
+    float bz = midz + size / 2;
+    float cx = midx + size / 2;
+    float cy = midy + size / 2;
+    float cz = midz + size / 2;
+    float dx = midx - size / 2;
+    float dy = midy + size / 2;
+    float dz = midz + size / 2;
+    float ex = midx - size / 2;
+    float ey = midy - size / 2;
+    float ez = midz - size / 2;
+    float fx = midx + size / 2;
+    float fy = midy - size / 2;
+    float fz = midz - size / 2;
+    float gx = midx + size / 2;
+    float gy = midy + size / 2;
+    float gz = midz - size / 2;
+    float hx = midx - size / 2;
+    float hy = midy + size / 2;
+    float hz = midz - size / 2;
+    
+    int beginMode;
+
+        glColor3f(1, 0, 0);
+        beginMode = GL_POLYGON;
+
+    // Draw 6 faces
+    glBegin(beginMode);
+    glVertex3f(ax, ay, az);
+    glVertex3f(bx, by, bz);
+    glVertex3f(cx, cy, cz);
+    glVertex3f(dx, dy, dz);
+    glEnd();
+    
+    glBegin(beginMode);
+    glVertex3f(ax, ay, az);
+    glVertex3f(dx, dy, dz);
+    glVertex3f(hx, hy, hz);
+    glVertex3f(ex, ey, ez);
+    glEnd();
+    
+    glBegin(beginMode);
+    glVertex3f(ax, ay, az);
+    glVertex3f(ex, ey, ez);
+    glVertex3f(fx, fy, fz);
+    glVertex3f(bx, by, bz);
+    glEnd();
+    
+    glBegin(beginMode);
+    glVertex3f(gx, gy, gz);
+    glVertex3f(fx, fy, fz);
+    glVertex3f(ex, ey, ez);
+    glVertex3f(hx, hy, hz);
+    glEnd();
+    
+    glBegin(beginMode);
+    glVertex3f(gx, gy, gz);
+    glVertex3f(cx, cy, cz);
+    glVertex3f(bx, by, bz);
+    glVertex3f(fx, fy, fz);
+    glEnd();
+    
+    glBegin(beginMode);
+    glVertex3f(gx, gy, gz);
+    glVertex3f(hx, hy, hz);
+    glVertex3f(dx, dy, dz);
+    glVertex3f(cx, cy, cz);
+    glEnd();
+
+}
 //---------------------------------------
 // Function to draw 3D block
 //---------------------------------------
@@ -181,16 +281,8 @@ void init()
     init_texture((char *)"textures/brick0.jpg", brick, xdim, ydim);
     init_texture((char *)"textures/grass1.jpg", grass, grassXDim, grassYDim);
     init_texture((char *)"textures/rock1.jpg", rock, rockXDim, rockYDim);
-//    init_texture((char *)"textures/grass1.jpg", grass, grassXDim, grassYDim); finish wood
-
-    
-    glEnable(GL_TEXTURE_2D);
-//    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, xdim, ydim, 0, GL_RGB, GL_UNSIGNED_BYTE, brick);
-//    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, grassXDim, grassYDim, 0, GL_RGB, GL_UNSIGNED_BYTE, grass);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    init_texture((char *)"textures/wood.jpg", wood, woodXDim, woodYDim);
+    init_texture((char *)"textures/lava2.jpg", lava, lavaXDim, lavaYDim);
 }
 
 //---------------------------------------
@@ -207,32 +299,39 @@ void display()
     glRotatef(yangle, 0.0, 1.0, 0.0);
     glRotatef(zangle, 0.0, 0.0, 1.0);
     
-    float yposition = -1;
+    float yposition = -1.4;
     float zposition = 0;
-    float size = .1;
+    float size = .15;
     // loop to draw blocks
+
     for (int i = 0; i < rows; i++) {
-        
-        float xposition = -.5;
+
+        float xposition = -1.4;
         for (int j = 0; j < cols; j++) {
             
+            // draw the player
+//            if(maze[i][j] == 'p')
+//            {
+//
+//            }
             if(maze[i][j] == 'b')
             {
+
                 glEnable(GL_TEXTURE_2D);
-                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, xdim, ydim, 0, GL_RGB, GL_UNSIGNED_BYTE, brick);
-                //    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, grassXDim, grassYDim, 0, GL_RGB, GL_UNSIGNED_BYTE, grass);
+
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, xdim, ydim, 0, GL_RGB, GL_UNSIGNED_BYTE, brick);
                 glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
                 glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
                 glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                 glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
                 // before you call block you initialize the new texture
                 block(xposition, yposition, zposition, xposition+size, yposition+size, zposition+size);
+                
                 xposition +=size;
             }
             else if(maze[i][j] == 'r')
             {
                 glEnable(GL_TEXTURE_2D);
-                //    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, xdim, ydim, 0, GL_RGB, GL_UNSIGNED_BYTE, brick);
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, rockXDim, rockYDim, 0, GL_RGB, GL_UNSIGNED_BYTE, rock);
                 glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
                 glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -242,10 +341,33 @@ void display()
 
                 xposition+=size;
             }
+            else if(maze[i][j] == 'w')
+            {
+                glEnable(GL_TEXTURE_2D);
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, woodXDim, woodYDim, 0, GL_RGB, GL_UNSIGNED_BYTE, wood);
+                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+                block(xposition, yposition, zposition, xposition+size, yposition+size, zposition+size);
+                
+                xposition+=size;
+            }
+            else if(maze[i][j] == 'p')
+            {
+                glEnable(GL_TEXTURE_2D);
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, lavaXDim, lavaYDim, 0, GL_RGB, GL_UNSIGNED_BYTE, lava);
+                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+                block(xposition, yposition, zposition, xposition+size, yposition+size, zposition+size);
+                
+                xposition+=size;
+            }
             else{
                 glEnable(GL_TEXTURE_2D);
-                //    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, xdim, ydim, 0, GL_RGB, GL_UNSIGNED_BYTE, brick);
-                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, grassXDim, grassYDim, 0, GL_RGB, GL_UNSIGNED_BYTE, grass);
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, grassXDim, grassYDim, 0, GL_RGB, GL_UNSIGNED_BYTE, grass);
                 glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
                 glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
                 glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -254,6 +376,9 @@ void display()
 
                 xposition+=size;
             }
+//            glDisable(GL_TEXTURE_2D);
+//            draw_cube(1, 1, 1, 1);
+
         }
         yposition+=size;
     }
@@ -372,6 +497,8 @@ void ReadInMuhTextMAN(){
     cols = vec[1];
     startCol = vec[2];
     startRow = vec[3];
+    playerX = vec[2];
+    playerY = vec[3];
 
     // read in maze
     for (int i = 0; i < rows; i++) {
@@ -381,6 +508,7 @@ void ReadInMuhTextMAN(){
             row.push_back(line[j]);
         }
         maze.push_back(row);
+        maze[startCol][startRow] = 'p';
     }
 }
 //---------------------------------------
@@ -390,8 +518,8 @@ int main(int argc, char *argv[])
 {
     // Create OpenGL window
     glutInit(&argc, argv);
-    glutInitWindowSize(700, 700);
-    glutInitWindowPosition(200, 200);
+    glutInitWindowSize(1280, 720);
+    glutInitWindowPosition(100, 100);
     glutInitDisplayMode(GLUT_RGB | GLUT_SINGLE | GLUT_DEPTH);
     glutCreateWindow("Texture");
     glutDisplayFunc(display);
