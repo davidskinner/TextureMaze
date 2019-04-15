@@ -229,10 +229,19 @@ void display()
                 block(xposition, yposition, zposition, xposition+size, yposition+size, zposition+size);
                 xposition +=size;
             }
-//            else if(maze[i][j] == 'r')
-//            {
-//
-//            }
+            else if(maze[i][j] == 'r')
+            {
+                glEnable(GL_TEXTURE_2D);
+                //    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, xdim, ydim, 0, GL_RGB, GL_UNSIGNED_BYTE, brick);
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, rockXDim, rockYDim, 0, GL_RGB, GL_UNSIGNED_BYTE, rock);
+                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+                block(xposition, yposition, zposition, xposition+size, yposition+size, zposition+size);
+
+                xposition+=size;
+            }
             else{
                 glEnable(GL_TEXTURE_2D);
                 //    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, xdim, ydim, 0, GL_RGB, GL_UNSIGNED_BYTE, brick);
@@ -241,7 +250,7 @@ void display()
                 glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
                 glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                 glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-                block(xposition, yposition, zposition-size, xposition+size, yposition+size, zposition);
+                block(xposition, yposition, zposition, xposition+size, yposition+size, zposition);
 
                 xposition+=size;
             }
