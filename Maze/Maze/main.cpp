@@ -3,7 +3,7 @@
 // Program: texture3.cpp
 // Purpose: Texture map brick photograph
 //          onto a cube model.
-// Author:  John Gauch
+// Author:  John Gauch and David Skinner
 // Date:    April 2011
 // Notes: Thanks programming dad!
 //---------------------------------------
@@ -108,86 +108,6 @@ void rectangle(float red, float green, float blue,
 }
 
 //---------------------------------------
-// Draw 3D cube
-//---------------------------------------
-void draw_cube(float midx, float midy, float midz, float size)
-{
-    // Define 8 vertices
-    float ax = midx - size / 2;
-    float ay = midy - size / 2;
-    float az = midz + size / 2;
-    float bx = midx + size / 2;
-    float by = midy - size / 2;
-    float bz = midz + size / 2;
-    float cx = midx + size / 2;
-    float cy = midy + size / 2;
-    float cz = midz + size / 2;
-    float dx = midx - size / 2;
-    float dy = midy + size / 2;
-    float dz = midz + size / 2;
-    float ex = midx - size / 2;
-    float ey = midy - size / 2;
-    float ez = midz - size / 2;
-    float fx = midx + size / 2;
-    float fy = midy - size / 2;
-    float fz = midz - size / 2;
-    float gx = midx + size / 2;
-    float gy = midy + size / 2;
-    float gz = midz - size / 2;
-    float hx = midx - size / 2;
-    float hy = midy + size / 2;
-    float hz = midz - size / 2;
-    
-    int beginMode;
-
-        glColor3f(1, 0, 0);
-        beginMode = GL_POLYGON;
-
-    // Draw 6 faces
-    glBegin(beginMode);
-    glVertex3f(ax, ay, az);
-    glVertex3f(bx, by, bz);
-    glVertex3f(cx, cy, cz);
-    glVertex3f(dx, dy, dz);
-    glEnd();
-    
-    glBegin(beginMode);
-    glVertex3f(ax, ay, az);
-    glVertex3f(dx, dy, dz);
-    glVertex3f(hx, hy, hz);
-    glVertex3f(ex, ey, ez);
-    glEnd();
-    
-    glBegin(beginMode);
-    glVertex3f(ax, ay, az);
-    glVertex3f(ex, ey, ez);
-    glVertex3f(fx, fy, fz);
-    glVertex3f(bx, by, bz);
-    glEnd();
-    
-    glBegin(beginMode);
-    glVertex3f(gx, gy, gz);
-    glVertex3f(fx, fy, fz);
-    glVertex3f(ex, ey, ez);
-    glVertex3f(hx, hy, hz);
-    glEnd();
-    
-    glBegin(beginMode);
-    glVertex3f(gx, gy, gz);
-    glVertex3f(cx, cy, cz);
-    glVertex3f(bx, by, bz);
-    glVertex3f(fx, fy, fz);
-    glEnd();
-    
-    glBegin(beginMode);
-    glVertex3f(gx, gy, gz);
-    glVertex3f(hx, hy, hz);
-    glVertex3f(dx, dy, dz);
-    glVertex3f(cx, cy, cz);
-    glEnd();
-
-}
-//---------------------------------------
 // Function to draw 3D block
 //---------------------------------------
 void block(float xmin, float ymin, float zmin,
@@ -289,7 +209,7 @@ void init()
     init_texture((char *)"textures/grass1.jpg", grass, grassXDim, grassYDim);
     init_texture((char *)"textures/rock1.jpg", rock, rockXDim, rockYDim);
     init_texture((char *)"textures/wood.jpg", wood, woodXDim, woodYDim);
-    init_texture((char *)"textures/lava2.jpg", lava, lavaXDim, lavaYDim);
+    init_texture((char *)"textures/red.jpg", lava, lavaXDim, lavaYDim);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -362,13 +282,10 @@ void display()
 
                 xposition+=size;
             }
-
-
         }
         yposition+=size;
     }
-    
-    glFlush();
+        glFlush();
 }
 
 //---------------------------------------
